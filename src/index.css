@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0b1120;
+  color: #e5e7eb;
+}
+
+a {
+  color: inherit;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-grid.cols-3 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.card-grid.cols-2 {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 9999px;
+}
