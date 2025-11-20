@@ -11,7 +11,7 @@ import {
   TimeScale,
   Filler
 } from 'chart.js';
-import 'chartjs-adapter-date-fns';
+import '../lib/chartjsNativeDateAdapter';
 import { Line, Bar, Scatter } from 'react-chartjs-2';
 
 ChartJS.register(
