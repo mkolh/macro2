@@ -21,8 +21,9 @@ A single-page React + TypeScript dashboard that visualizes macroeconomic and pol
 ## Configuration
 
 - Data mode is driven by the `VITE_USE_DUMMY_DATA` flag (default `true`). Set it to `false` in a `.env` or `.env.local` file to enable live fetches once API keys are provided.
-- API keys (placeholders for now):
-  - `VITE_FRED_API_KEY` for US macro series (place in the project root, e.g., `.env.local`).
+- Backend proxy: start `npm run server` to launch the Express proxy on port 3000. Vite is configured to proxy `/api` requests to this backend during development.
+- API keys:
+  - `FRED_API_KEY` (in a root `.env.local`) for US macro series proxied through `server.js`.
   - World Bank, BEA, OECD/ILOSTAT, WID endpoints are stubbed and can be filled in the data hooks.
 
 ## Structure

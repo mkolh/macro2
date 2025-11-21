@@ -14,24 +14,21 @@ import {
 const USE_DUMMY_DATA = import.meta.env?.VITE_USE_DUMMY_DATA !== 'false';
 
 async function fetchFredSeries(seriesId: string, frequency: 'monthly' | 'quarterly'): Promise<TimeSeriesPoint[]> {
-  const apiKey = import.meta.env?.VITE_FRED_API_KEY;
-  if (!apiKey) throw new Error('Missing VITE_FRED_API_KEY for FRED request');
-
   const params = new URLSearchParams({
     series_id: seriesId,
-    api_key: apiKey,
-    file_type: 'json',
-    sort_order: 'asc',
     frequency: frequency === 'monthly' ? 'm' : 'q'
   });
-  const url = `https://api.stlouisfed.org/fred/series/observations?${params.toString()}`;
-  const res = await fetch(url);
+  const res = await fetch(`/api/fred/series?${params.toString()}`);
   if (!res.ok) {
-    throw new Error(`FRED request failed with status ${res.status}`);
+    const body = await res.text();
+    throw new Error(`FRED request failed with status ${res.status}${body ? `: ${body}` : ''}`);
   }
 
-  const json = (await res.json()) as { observations?: FredObservation[] };
-  const observations = json.observations ?? [];
+  const json = (await res.json()) as { observations?: FredObservation[]; error?: string };
+  const observations = json.observations;
+  if (!observations) {
+    throw new Error(json.error ?? 'FRED response missing observations');
+  }
 
   return observations
     .filter((obs) => obs.value !== '.')
