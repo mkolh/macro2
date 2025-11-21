@@ -6,10 +6,10 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const FRED_API_KEY = process.env.FRED_API_KEY;
+const FRED_API_KEY = process.env.VITE_FRED_API_KEY ?? process.env.FRED_API_KEY;
 
 if (!FRED_API_KEY) {
-  console.warn('Warning: FRED_API_KEY is not set in your environment.');
+  console.warn('Warning: VITE_FRED_API_KEY (or FRED_API_KEY) is not set in your environment.');
 }
 
 app.get('/api/fred/series', async (req, res) => {
