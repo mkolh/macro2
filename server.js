@@ -2,7 +2,8 @@ import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ path: '.env.local', override: true });
+dotenv.config({ path: '.env' });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
