@@ -129,22 +129,19 @@ function formatDate(value: number, format: FormatKey): string {
 }
 
 _adapters._date.override({
+  // @ts-expect-error Chart.js allows an _id on adapters even if the typings omit it
   _id: 'native-date-adapter',
   formats: () => ({ ...FORMATS }),
   parse(value: TimeInput, format?: FormatKey) {
     if (typeof value === 'number') {
       return value;
     }
-
-    if (format === 'unix') {
-      return typeof value === 'number' ? value * 1000 : null;
-    }
-
     const date = toDate(value);
     return date ? date.getTime() : null;
   },
-  format(time: number, format: FormatKey = 'datetime') {
-    return formatDate(time, format);
+  format(time: number, format: string) {
+    const safeFormat: FormatKey = (format as FormatKey) in FORMATS ? (format as FormatKey) : 'datetime';
+    return formatDate(time, safeFormat);
   },
   add(time: number, amount: number, unit: Unit) {
     return time + amount * UNIT_SIZE[unit];

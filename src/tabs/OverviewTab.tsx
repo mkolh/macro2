@@ -23,30 +23,32 @@ export function OverviewTab() {
 
   if (usLoading || worldLoading) return <Spinner />;
   if (usError || worldError)
-    return <Card className="text-rose-200">Failed to load data. Showing nothing for now.</Card>;
+    return <Card className="text-rose-200">Failed to load data. Please verify the uploaded JSON file.</Card>;
   if (!usData || !worldData) return null;
 
-  const latestGDP = usData.gdp.at(-1)?.value ?? 0;
-  const prevGDP = usData.gdp.at(-2)?.value ?? latestGDP;
-  const latestInflation = usData.inflation.at(-1)?.value ?? 0;
-  const latestUnemployment = usData.unemployment.at(-1)?.value ?? 0;
-  const cycle = classifyCycle(latestGDP, latestInflation, latestUnemployment);
-  const bullets = describeCycle(latestGDP, latestInflation, latestUnemployment);
+  const latestGrowth = usData.gdpGrowthYoY.at(-1)?.value ?? 0;
+  const latestInflation = usData.inflationYoY.at(-1)?.value ?? 0;
+  const latestUnemployment = usData.unemploymentRate.at(-1)?.value ?? 0;
+  const cycle = classifyCycle(latestGrowth, latestInflation, latestUnemployment);
+  const bullets = describeCycle(latestGrowth, latestInflation, latestUnemployment);
 
+  const latestGDP = usData.gdpReal.at(-1)?.value ?? 0;
+  const prevGDP = usData.gdpReal.at(-2)?.value ?? latestGDP;
   const gdpChange = latestGDP - prevGDP;
+
   const usChartData = {
-    labels: usData.gdp.map((p) => p.date),
+    labels: usData.gdpReal.map((p) => p.date),
     datasets: [
       {
         label: 'US Real GDP (trn)',
-        data: usData.gdp.map((p) => p.value),
+        data: usData.gdpReal.map((p) => p.value),
         borderColor: '#3b82f6',
         tension: 0.3,
         yAxisID: 'y'
       },
       {
-        label: 'CPI inflation %',
-        data: usData.inflation.map((p) => p.value),
+        label: 'CPI inflation YoY %',
+        data: usData.inflationYoY.map((p) => p.value),
         borderColor: '#f97316',
         tension: 0.3,
         yAxisID: 'y1'
@@ -55,17 +57,17 @@ export function OverviewTab() {
   };
 
   const worldChartData = {
-    labels: worldData.countrySeries.World.map((p) => p.date),
+    labels: worldData.gdpGrowth.map((p) => p.date),
     datasets: [
       {
         label: 'World GDP growth %',
-        data: worldData.countrySeries.World.map((p) => p.value),
+        data: worldData.gdpGrowth.map((p) => p.value),
         borderColor: '#22c55e',
         tension: 0.3
       },
       {
         label: 'World inflation %',
-        data: worldData.countrySeries.Inflation.map((p) => p.value),
+        data: worldData.inflation.map((p) => p.value),
         borderColor: '#fbbf24',
         tension: 0.3
       }
@@ -102,31 +104,23 @@ export function OverviewTab() {
       </Card>
 
       <div className="card-grid cols-3">
-        <KPI label="US real GDP" value={`${latestGDP.toFixed(1)} trn`} trend={`Δ ${gdpChange.toFixed(1)} vs last year`} trendType="good" />
-        <KPI label="CPI inflation" value={`${latestInflation.toFixed(1)}%`} trend="Goal ~2%" trendType="warn" />
-        <KPI label="Unemployment" value={`${latestUnemployment.toFixed(1)}%`} trend="Steady" trendType="neutral" />
+        <KPI label="US real GDP" value={`${latestGDP.toFixed(1)} trn`} trend={`Δ ${gdpChange.toFixed(1)} vs last obs`} trendType="good" />
+        <KPI label="CPI inflation" value={`${latestInflation.toFixed(1)}%`} trend="YoY" trendType="warn" />
+        <KPI label="Unemployment" value={`${latestUnemployment.toFixed(1)}%`} trend="Headline" trendType="neutral" />
       </div>
 
       <div className="card-grid cols-2">
         <Card>
           <CardHeader title="US macro snapshot" subtitle="GDP & inflation" />
           <ChartContainer type="line" data={usChartData} options={chartOptions} />
-          <ExplainText>Simple snapshot combining output and prices for the last decade.</ExplainText>
+          <ExplainText>Values pulled from the uploaded JSON file: GDP levels and CPI year-over-year inflation.</ExplainText>
         </Card>
         <Card>
           <CardHeader title="World macro snapshot" subtitle="Growth & inflation" />
           <ChartContainer type="line" data={worldChartData} options={chartOptions} />
-          <ExplainText>Global context using placeholder World Bank indicators.</ExplainText>
+          <ExplainText>World aggregates supplied by the JSON file replacing previous API calls.</ExplainText>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader title="Who gains / who loses" subtitle="Distributional lens" />
-        <ExplainText>
-          In expansions, profits and top income shares often rise faster than wages. A cooling cycle can ease inflation but risks higher
-          unemployment for vulnerable groups.
-        </ExplainText>
-      </Card>
     </div>
   );
 }

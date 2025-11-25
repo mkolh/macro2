@@ -18,7 +18,7 @@ export function USDetailTab() {
   }, [shock]);
 
   if (loading) return <Spinner />;
-  if (error) return <Card className="text-rose-200">Failed to load US data.</Card>;
+  if (error) return <Card className="text-rose-200">Failed to load US data. Check your JSON file.</Card>;
   if (!data) return null;
 
   const baseOptions = {
@@ -31,22 +31,22 @@ export function USDetailTab() {
   };
 
   const gdpChart = {
-    labels: data.gdp.map((p) => p.date),
-    datasets: [{ label: 'Real GDP (trn)', data: data.gdp.map((p) => p.value), borderColor: '#3b82f6', tension: 0.3 }]
+    labels: data.gdpReal.map((p) => p.date),
+    datasets: [{ label: 'Real GDP (trn)', data: data.gdpReal.map((p) => p.value), borderColor: '#3b82f6', tension: 0.3 }]
   };
 
   const cpiFunds = {
-    labels: data.inflation.map((p) => p.date),
+    labels: data.inflationYoY.map((p) => p.date),
     datasets: [
       {
-        label: 'CPI %',
-        data: data.inflation.map((p) => p.value),
+        label: 'CPI YoY %',
+        data: data.inflationYoY.map((p) => p.value),
         borderColor: '#f97316',
         yAxisID: 'y'
       },
       {
         label: 'Fed Funds %',
-        data: data.fedFunds?.map((p) => p.value) ?? [],
+        data: data.fedFundsRate.map((p) => p.value),
         borderColor: '#22c55e',
         yAxisID: 'y1'
       }
@@ -63,14 +63,14 @@ export function USDetailTab() {
   };
 
   const unemploymentChart = {
-    labels: data.unemployment.map((p) => p.date),
-    datasets: [{ label: 'Unemployment %', data: data.unemployment.map((p) => p.value), borderColor: '#22d3ee' }]
+    labels: data.unemploymentRate.map((p) => p.date),
+    datasets: [{ label: 'Unemployment %', data: data.unemploymentRate.map((p) => p.value), borderColor: '#22d3ee' }]
   };
 
   const debtChart = {
-    labels: data.debtToGdp?.map((p) => p.date) ?? [],
+    labels: data.debtToGdp.map((p) => p.date),
     datasets: [
-      { label: 'Debt / GDP %', data: data.debtToGdp?.map((p) => p.value) ?? [], borderColor: '#a855f7', tension: 0.3 }
+      { label: 'Debt / GDP %', data: data.debtToGdp.map((p) => p.value), borderColor: '#a855f7', tension: 0.3 }
     ]
   };
 
@@ -78,7 +78,7 @@ export function USDetailTab() {
     datasets: [
       {
         label: 'Phillips curve',
-        data: data.unemployment.map((u, idx) => ({ x: u.value, y: data.inflation[idx]?.value ?? 0 })),
+        data: data.unemploymentRate.map((u, idx) => ({ x: u.value, y: data.inflationYoY[idx]?.value ?? 0 })),
         backgroundColor: '#3b82f6'
       }
     ]
@@ -88,17 +88,17 @@ export function USDetailTab() {
     datasets: [
       {
         label: 'Okun points',
-        data: data.gdp.map((g, idx) => ({ x: g.value - (data.gdp[idx - 1]?.value ?? g.value), y: (data.unemployment[idx]?.value ?? 0) - (data.unemployment[idx - 1]?.value ?? 0) })),
+        data: data.gdpGrowthYoY.map((g, idx) => ({ x: g.value, y: (data.unemploymentRate[idx]?.value ?? 0) - (data.unemploymentRate[idx - 1]?.value ?? 0) })),
         backgroundColor: '#f59e0b'
       }
     ]
   };
 
   const tableRows = [
-    { indicator: 'GDP (trn)', value: data.gdp.at(-1)?.value.toFixed(1), change: '+0.6', comment: 'Above trend' },
-    { indicator: 'Inflation %', value: data.inflation.at(-1)?.value.toFixed(1), change: '-0.2', comment: 'Easing slowly' },
-    { indicator: 'Unemployment %', value: data.unemployment.at(-1)?.value.toFixed(1), change: '+0.1', comment: 'Labor market cooling' },
-    { indicator: 'Debt / GDP %', value: data.debtToGdp?.at(-1)?.value.toFixed(1), change: '+1.5', comment: 'Rising debt ratio' }
+    { indicator: 'GDP (trn)', value: data.gdpReal.at(-1)?.value.toFixed(1), change: `${data.gdpGrowthYoY.at(-1)?.value ?? 0}%`, comment: 'Latest observation' },
+    { indicator: 'Inflation %', value: data.inflationYoY.at(-1)?.value.toFixed(1), change: 'YoY', comment: 'Derived from CPI' },
+    { indicator: 'Unemployment %', value: data.unemploymentRate.at(-1)?.value.toFixed(1), change: 'Last value', comment: 'Headline rate' },
+    { indicator: 'Debt / GDP %', value: data.debtToGdp.at(-1)?.value.toFixed(1), change: 'Last value', comment: 'Federal debt' }
   ];
 
   return (
@@ -107,12 +107,12 @@ export function USDetailTab() {
         <Card>
           <CardHeader title="US real GDP" subtitle="Level" />
           <ChartContainer type="line" data={gdpChart} options={baseOptions} />
-          <ExplainText>Quarterly real GDP path in trillions.</ExplainText>
+          <ExplainText>Quarterly/annualized GDP levels supplied by the uploaded dataset.</ExplainText>
         </Card>
         <Card>
           <CardHeader title="CPI vs Fed funds" subtitle="Prices & policy" />
           <ChartContainer type="line" data={cpiFunds} options={dualOptions} />
-          <ExplainText>Policy rates vs inflation to show stance.</ExplainText>
+          <ExplainText>Policy rates and inflation series pulled directly from JSON.</ExplainText>
         </Card>
       </div>
 
@@ -136,12 +136,12 @@ export function USDetailTab() {
         <Card>
           <CardHeader title="Unemployment" subtitle="Headline rate" />
           <ChartContainer type="line" data={unemploymentChart} options={baseOptions} />
-          <ExplainText>Jobless rate trend vs prior years.</ExplainText>
+          <ExplainText>Labor market path recorded in the JSON data.</ExplainText>
         </Card>
         <Card>
           <CardHeader title="Debt to GDP" subtitle="Federal" />
           <ChartContainer type="line" data={debtChart} options={baseOptions} />
-          <ExplainText>Debt sustainability gauge.</ExplainText>
+          <ExplainText>Debt sustainability gauge from the debtToGdp series.</ExplainText>
         </Card>
       </div>
 
@@ -180,15 +180,7 @@ export function USDetailTab() {
             </tbody>
           </table>
         </div>
-        <ExplainText>Quick US snapshot with dummy YoY moves.</ExplainText>
-      </Card>
-
-      <Card>
-        <CardHeader title="Who gains / loses" subtitle="US detail" />
-        <ExplainText>
-          A hotter economy often boosts profits and asset prices; tighter policy can slow inflation but may raise unemployment for
-          workers with less bargaining power.
-        </ExplainText>
+        <ExplainText>Values are sourced from the uploaded dataset rather than any API.</ExplainText>
       </Card>
     </div>
   );

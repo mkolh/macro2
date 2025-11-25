@@ -1,4 +1,4 @@
-import { HistoricalDecade, USBulletPoints } from '../data/types';
+import { MacroHistoricalDecade, USBulletPoints } from '../data/types';
 
 export function classifyCycle(growth: number, inflation: number, unemployment: number): 'near-trend' | 'cooling' | 'overheating' {
   if (growth > 3 && inflation > 3 && unemployment < 4) return 'overheating';
@@ -14,10 +14,10 @@ export function describeCycle(growth: number, inflation: number, unemployment: n
   };
 }
 
-export function summarizeRegimes(decades: HistoricalDecade[]): string {
+export function summarizeRegimes(decades: MacroHistoricalDecade[]): string {
   const pre1980 = decades.filter((d) => d.label < '1980');
   const post1980 = decades.filter((d) => d.label >= '1980');
-  const avg = (arr: HistoricalDecade[]) =>
+  const avg = (arr: MacroHistoricalDecade[]) =>
     arr.reduce(
       (acc, d) => ({ growth: acc.growth + d.avgGrowth, inflation: acc.inflation + d.avgInflation }),
       { growth: 0, inflation: 0 }
