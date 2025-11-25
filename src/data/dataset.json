@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "generatedAt": "2025-01-01T00:00:00.000Z",
+    "note": "per-country flexible structure",
+    "scriptVersion": "1.0.0",
+    "license": "MIT",
+    "nextRefresh": "2025-04-01T00:00:00.000Z"
+  },
+  "countries": {
+    "USA": {
+      "name": "United States",
+      "macro": {
+        "series": {
+          "gdpReal": [
+            { "date": "2019-01-01", "value": 19.2 },
+            { "date": "2020-01-01", "value": 18.8 },
+            { "date": "2021-01-01", "value": 19.9 },
+            { "date": "2022-01-01", "value": 20.5 },
+            { "date": "2023-01-01", "value": 21.1 },
+            { "date": "2024-01-01", "value": 21.6 }
+          ],
+          "cpi": [
+            { "date": "2019-01-01", "value": 255.7 },
+            { "date": "2020-01-01", "value": 258.8 },
+            { "date": "2021-01-01", "value": 270.4 },
+            { "date": "2022-01-01", "value": 289.1 },
+            { "date": "2023-01-01", "value": 300.1 },
+            { "date": "2024-01-01", "value": 306.9 }
+          ],
+          "unemploymentRate": [
+            { "date": "2019-01-01", "value": 3.9 },
+            { "date": "2020-01-01", "value": 8.1 },
+            { "date": "2021-01-01", "value": 5.4 },
+            { "date": "2022-01-01", "value": 3.7 },
+            { "date": "2023-01-01", "value": 3.5 },
+            { "date": "2024-01-01", "value": 3.9 }
+          ],
+          "fedFundsRate": [
+            { "date": "2019-01-01", "value": 2.4 },
+            { "date": "2020-01-01", "value": 0.25 },
+            { "date": "2021-01-01", "value": 0.25 },
+            { "date": "2022-01-01", "value": 1.75 },
+            { "date": "2023-01-01", "value": 4.5 },
+            { "date": "2024-01-01", "value": 5.25 }
+          ],
+          "debtToGdp": [
+            { "date": "2019-01-01", "value": 104 },
+            { "date": "2020-01-01", "value": 127 },
+            { "date": "2021-01-01", "value": 125 },
+            { "date": "2022-01-01", "value": 121 },
+            { "date": "2023-01-01", "value": 119 },
+            { "date": "2024-01-01", "value": 118 }
+          ]
+        },
+        "derived": {
+          "inflationYoY": [
+            { "date": "2020-01-01", "value": 1.2 },
+            { "date": "2021-01-01", "value": 4.5 },
+            { "date": "2022-01-01", "value": 6.9 },
+            { "date": "2023-01-01", "value": 3.8 },
+            { "date": "2024-01-01", "value": 2.3 }
+          ],
+          "gdpGrowthYoY": [
+            { "date": "2020-01-01", "value": -2.1 },
+            { "date": "2021-01-01", "value": 5.9 },
+            { "date": "2022-01-01", "value": 3.0 },
+            { "date": "2023-01-01", "value": 2.9 },
+            { "date": "2024-01-01", "value": 2.4 }
+          ],
+          "inflationYoYAnnual": [
+            { "date": "2020-01-01", "value": 1.2 },
+            { "date": "2021-01-01", "value": 4.5 },
+            { "date": "2022-01-01", "value": 6.9 },
+            { "date": "2023-01-01", "value": 3.8 },
+            { "date": "2024-01-01", "value": 2.3 }
+          ],
+          "gdpGrowthYoYAnnual": [
+            { "date": "2020-01-01", "value": -2.1 },
+            { "date": "2021-01-01", "value": 5.9 },
+            { "date": "2022-01-01", "value": 3.0 },
+            { "date": "2023-01-01", "value": 2.9 },
+            { "date": "2024-01-01", "value": 2.4 }
+          ]
+        },
+        "historicalView": {
+          "decades": [
+            { "label": "1950s", "startYear": 1950, "endYear": 1959, "avgGrowth": 4.1, "avgInflation": 2.0 },
+            { "label": "1960s", "startYear": 1960, "endYear": 1969, "avgGrowth": 4.6, "avgInflation": 2.4 },
+            { "label": "1970s", "startYear": 1970, "endYear": 1979, "avgGrowth": 3.2, "avgInflation": 6.8 },
+            { "label": "1980s", "startYear": 1980, "endYear": 1989, "avgGrowth": 3.0, "avgInflation": 4.6 },
+            { "label": "1990s", "startYear": 1990, "endYear": 1999, "avgGrowth": 3.6, "avgInflation": 2.7 },
+            { "label": "2000s", "startYear": 2000, "endYear": 2009, "avgGrowth": 1.8, "avgInflation": 2.5 },
+            { "label": "2010s", "startYear": 2010, "endYear": 2019, "avgGrowth": 2.3, "avgInflation": 1.8 },
+            { "label": "2020s", "startYear": 2020, "endYear": 2024, "avgGrowth": 2.2, "avgInflation": 3.3 }
+          ]
+        }
+      }
+    },
+    "WLD": {
+      "name": "World",
+      "macro": {
+        "series": {
+          "gdpGrowth": [
+            { "date": "2019-01-01", "value": 2.9 },
+            { "date": "2020-01-01", "value": -3.1 },
+            { "date": "2021-01-01", "value": 6.2 },
+            { "date": "2022-01-01", "value": 3.5 },
+            { "date": "2023-01-01", "value": 2.9 },
+            { "date": "2024-01-01", "value": 2.8 }
+          ],
+          "inflation": [
+            { "date": "2019-01-01", "value": 2.5 },
+            { "date": "2020-01-01", "value": 1.9 },
+            { "date": "2021-01-01", "value": 3.8 },
+            { "date": "2022-01-01", "value": 7.1 },
+            { "date": "2023-01-01", "value": 5.0 },
+            { "date": "2024-01-01", "value": 3.6 }
+          ]
+        },
+        "historicalView": {
+          "decades": [
+            { "label": "1960s", "startYear": 1960, "endYear": 1969, "avgGrowth": 5.2, "avgInflation": 3.6 },
+            { "label": "1970s", "startYear": 1970, "endYear": 1979, "avgGrowth": 4.1, "avgInflation": 7.8 },
+            { "label": "1980s", "startYear": 1980, "endYear": 1989, "avgGrowth": 3.2, "avgInflation": 7.5 },
+            { "label": "1990s", "startYear": 1990, "endYear": 1999, "avgGrowth": 3.0, "avgInflation": 4.1 },
+            { "label": "2000s", "startYear": 2000, "endYear": 2009, "avgGrowth": 3.6, "avgInflation": 4.5 },
+            { "label": "2010s", "startYear": 2010, "endYear": 2019, "avgGrowth": 3.2, "avgInflation": 3.0 },
+            { "label": "2020s", "startYear": 2020, "endYear": 2024, "avgGrowth": 2.6, "avgInflation": 4.4 }
+          ]
+        }
+      }
+    }
+  }
+}

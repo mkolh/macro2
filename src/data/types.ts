@@ -3,56 +3,45 @@ export interface TimeSeriesPoint {
   value: number;
 }
 
-export interface PairedSeriesPoint {
-  x: number;
-  y: number;
+export interface MacroDerived {
+  inflationYoY?: TimeSeriesPoint[];
+  gdpGrowthYoY?: TimeSeriesPoint[];
+  inflationYoYAnnual?: TimeSeriesPoint[];
+  gdpGrowthYoYAnnual?: TimeSeriesPoint[];
 }
 
-export interface MacroSnapshot {
-  gdp: TimeSeriesPoint[];
-  inflation: TimeSeriesPoint[];
-  unemployment: TimeSeriesPoint[];
-  fedFunds?: TimeSeriesPoint[];
+export interface MacroSeries {
+  gdpReal?: TimeSeriesPoint[];
+  cpi?: TimeSeriesPoint[];
+  unemploymentRate?: TimeSeriesPoint[];
+  fedFundsRate?: TimeSeriesPoint[];
   debtToGdp?: TimeSeriesPoint[];
+  gdpGrowth?: TimeSeriesPoint[];
+  inflation?: TimeSeriesPoint[];
 }
 
-export interface GlobalSnapshot {
-  countries: Array<{
-    name: string;
-    gdpGrowth: number;
-    inflation: number;
-    debtToGdp: number;
-  }>;
-  countrySeries: Record<string, TimeSeriesPoint[]>;
-}
-
-export interface HistoricalDecade {
+export interface MacroHistoricalDecade {
   label: string;
+  startYear: number;
+  endYear: number;
   avgGrowth: number;
   avgInflation: number;
 }
 
-export interface DistributionData {
-  laborShare: TimeSeriesPoint[];
-  profitShare: TimeSeriesPoint[];
-  wagesProductivityProfit: Array<{ label: string; wage: number; productivity: number; profit: number }>;
-  inequality: Array<{ group: string; incomeShare: number; wealthShare: number }>;
-  unionDensity: TimeSeriesPoint[];
-  minimumWage: TimeSeriesPoint[];
+export interface CountryMacro {
+  series: MacroSeries;
+  derived?: MacroDerived;
+  historicalView?: { decades: MacroHistoricalDecade[] };
 }
 
-export interface InstitutionsData {
-  fiscalComposition: Array<{ category: string; value: number }>;
-  taxStructure: Array<{ category: string; value: number }>;
-  financeProfitShare: TimeSeriesPoint[];
-  lobbying: Array<{ sector: string; value: number }>;
+export interface CountryData {
+  name: string;
+  macro: CountryMacro;
 }
 
-export interface GlobalPEData {
-  corePeriphery: Array<{ region: string; gdpPerCapita: number; commodityShare: number }>;
-  tradeOpenness: Array<{ region: string; openness: number }>;
-  debtVsSocial: Array<{ country: string; debtService: number; socialSpending: number }>;
-  fdiFlows: Array<{ region: string; fdi: number; portfolio: number }>;
+export interface MacroDataset {
+  metadata: Record<string, string>;
+  countries: Record<string, CountryData>;
 }
 
 export interface HookResult<T> {
@@ -65,4 +54,20 @@ export interface USBulletPoints {
   growth: string;
   laborMarket: string;
   inflation: string;
+}
+
+export interface USMacroSnapshot {
+  gdpReal: TimeSeriesPoint[];
+  inflationYoY: TimeSeriesPoint[];
+  cpi: TimeSeriesPoint[];
+  unemploymentRate: TimeSeriesPoint[];
+  fedFundsRate: TimeSeriesPoint[];
+  debtToGdp: TimeSeriesPoint[];
+  gdpGrowthYoY: TimeSeriesPoint[];
+}
+
+export interface WorldMacroSnapshot {
+  gdpGrowth: TimeSeriesPoint[];
+  inflation: TimeSeriesPoint[];
+  decades: MacroHistoricalDecade[];
 }
