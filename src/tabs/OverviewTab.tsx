@@ -36,6 +36,8 @@ export function OverviewTab() {
   const prevGDP = usData.gdpReal.at(-2)?.value ?? latestGDP;
   const gdpChange = latestGDP - prevGDP;
 
+  const gridColor = '#1f2937';
+
   const usChartData = {
     labels: usData.gdpReal.map((p) => p.date),
     datasets: [
@@ -63,28 +65,52 @@ export function OverviewTab() {
         label: 'World GDP growth %',
         data: worldData.gdpGrowth.map((p) => p.value),
         borderColor: '#22c55e',
-        tension: 0.3
+        tension: 0.3,
+        yAxisID: 'y'
       },
       {
         label: 'World inflation %',
         data: worldData.inflation.map((p) => p.value),
         borderColor: '#fbbf24',
-        tension: 0.3
+        tension: 0.3,
+        yAxisID: 'y1'
       }
     ]
   };
 
-  const chartOptions = {
+  const makeDualAxisOptions = (primaryTitle: string, secondaryTitle: string) => ({
     responsive: true,
+    interaction: { mode: 'index', intersect: false },
     plugins: {
-      legend: { labels: { color: '#e5e7eb' } }
+      legend: { labels: { color: '#e5e7eb' } },
+      tooltip: {
+        callbacks: {
+          label: (ctx: any) => {
+            const value = ctx.parsed.y;
+            const suffix = ctx.dataset.label.toLowerCase().includes('%') ? '%' : '';
+            return `${ctx.dataset.label}: ${value}${suffix}`;
+          }
+        }
+      }
     },
     scales: {
-      x: { ticks: { color: '#9ca3af' } },
-      y: { ticks: { color: '#9ca3af' } },
-      y1: { position: 'right', ticks: { color: '#9ca3af' }, grid: { drawOnChartArea: false } }
+      x: { ticks: { color: '#9ca3af' }, grid: { color: gridColor } },
+      y: {
+        ticks: { color: '#9ca3af' },
+        grid: { color: gridColor },
+        title: { display: true, text: primaryTitle, color: '#cbd5e1' }
+      },
+      y1: {
+        position: 'right',
+        ticks: { color: '#9ca3af' },
+        grid: { drawOnChartArea: false, color: gridColor },
+        title: { display: true, text: secondaryTitle, color: '#cbd5e1' }
+      }
     }
-  };
+  });
+
+  const usChartOptions = makeDualAxisOptions('GDP level (trn USD)', 'Inflation %');
+  const worldChartOptions = makeDualAxisOptions('Growth %', 'Inflation %');
 
   return (
     <div className="flex flex-col gap-4">
@@ -112,12 +138,12 @@ export function OverviewTab() {
       <div className="card-grid cols-2">
         <Card>
           <CardHeader title="US macro snapshot" subtitle="GDP & inflation" />
-          <ChartContainer type="line" data={usChartData} options={chartOptions} />
+          <ChartContainer type="line" data={usChartData} options={usChartOptions} />
           <ExplainText>Values pulled from the uploaded JSON file: GDP levels and CPI year-over-year inflation.</ExplainText>
         </Card>
         <Card>
           <CardHeader title="World macro snapshot" subtitle="Growth & inflation" />
-          <ChartContainer type="line" data={worldChartData} options={chartOptions} />
+          <ChartContainer type="line" data={worldChartData} options={worldChartOptions} />
           <ExplainText>World aggregates supplied by the JSON file replacing previous API calls.</ExplainText>
         </Card>
       </div>
