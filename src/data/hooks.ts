@@ -5,7 +5,8 @@ import {
   USMacroSnapshot,
   WorldMacroSnapshot,
   MacroHistoricalDecade,
-  MacroDataset
+  MacroDataset,
+  CountryData
 } from './types';
 
 function normalizeNumber(value: number | undefined): number {
@@ -62,6 +63,30 @@ export function useHistoricalMacroData(countryCode: 'USA' | 'WLD' = 'USA'): Hook
 export function useMetadata() {
   const { dataset, loading, error, sourceLabel } = useDatasetContext();
   return { metadata: dataset?.metadata ?? {}, loading, error, sourceLabel };
+}
+
+export function useCountryList(): HookResult<{ code: string; name: string }[]> {
+  const { dataset, loading, error } = useDatasetContext();
+  const data = useMemo(
+    () =>
+      Object.entries(dataset?.countries ?? {}).map(([code, country]) => ({
+        code,
+        name: country.name ?? code
+      })),
+    [dataset]
+  );
+
+  return { data, loading, error };
+}
+
+export function useCountryData(countryCode: string | null): HookResult<CountryData | null> {
+  const { dataset, loading, error } = useDatasetContext();
+  const data = useMemo(() => {
+    if (!countryCode) return null;
+    return dataset?.countries?.[countryCode] ?? null;
+  }, [dataset, countryCode]);
+
+  return { data, loading, error };
 }
 
 export { normalizeNumber };

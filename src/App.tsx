@@ -5,12 +5,14 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { USDetailTab } from './tabs/USDetailTab';
 import { GlobalOverviewTab } from './tabs/GlobalOverviewTab';
 import { HistoricalTab } from './tabs/HistoricalTab';
+import { CountryExplorerTab } from './tabs/CountryExplorerTab';
 import { useDatasetContext } from './data/DatasetContext';
 import { useMetadata } from './data/hooks';
 
 const tabs = [
   { id: 'overview', label: 'Overview', component: <OverviewTab /> },
   { id: 'us', label: 'US Detail', component: <USDetailTab /> },
+  { id: 'country', label: 'Country Explorer', component: <CountryExplorerTab /> },
   { id: 'global', label: 'Global Overview', component: <GlobalOverviewTab /> },
   { id: 'historical', label: 'Historical (100y)', component: <HistoricalTab /> }
 ] as const;
