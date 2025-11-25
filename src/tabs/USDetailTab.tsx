@@ -10,6 +10,7 @@ import { useUSMacroData } from '../data/hooks';
 export function USDetailTab() {
   const { data, loading, error } = useUSMacroData();
   const [shock, setShock] = useState(0);
+  const gridColor = '#1f2937';
 
   const shockText = useMemo(() => {
     const deltaUnemp = (shock * 0.3).toFixed(1);
@@ -23,10 +24,11 @@ export function USDetailTab() {
 
   const baseOptions = {
     responsive: true,
+    interaction: { mode: 'index', intersect: false },
     plugins: { legend: { labels: { color: '#e5e7eb' } } },
     scales: {
-      x: { ticks: { color: '#9ca3af' } },
-      y: { ticks: { color: '#9ca3af' } }
+      x: { ticks: { color: '#9ca3af' }, grid: { color: gridColor } },
+      y: { ticks: { color: '#9ca3af' }, grid: { color: gridColor } }
     }
   };
 
@@ -56,9 +58,9 @@ export function USDetailTab() {
   const dualOptions = {
     ...baseOptions,
     scales: {
-      x: { ticks: { color: '#9ca3af' } },
-      y: { ticks: { color: '#9ca3af' } },
-      y1: { position: 'right', ticks: { color: '#9ca3af' }, grid: { drawOnChartArea: false } }
+      x: { ticks: { color: '#9ca3af' }, grid: { color: gridColor } },
+      y: { ticks: { color: '#9ca3af' }, grid: { color: gridColor } },
+      y1: { position: 'right', ticks: { color: '#9ca3af' }, grid: { drawOnChartArea: false, color: gridColor } }
     }
   };
 
